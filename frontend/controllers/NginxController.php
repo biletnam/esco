@@ -26,4 +26,13 @@ class NginxController extends ServiceControllerPrototype {
     {
         return 'nginx';
     }
+
+    public function actionStopService()
+    {
+        // тестируем валидность конфига
+        exec("sudo " . $this->getServiceName() . " -t 2>&1", $output);
+
+        //TODO останавливаем если все норм
+        parent::actionStopService();
+    }
 }

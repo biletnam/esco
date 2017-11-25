@@ -7,6 +7,8 @@
  */
 namespace frontend\prototypes;
 
+use yii\web\HttpException;
+
 abstract class ServiceControllerPrototype extends RestControllerPrototype
 {
     public $modelClass = '';
@@ -36,7 +38,7 @@ abstract class ServiceControllerPrototype extends RestControllerPrototype
      * Создает конфиг
      *
      * @param $siteId
-     * @return bool
+     * @return array
      */
     public function actionCreateConfig($siteId)
     {
@@ -50,7 +52,7 @@ abstract class ServiceControllerPrototype extends RestControllerPrototype
      * Удаляет конфиг
      *
      * @param $siteId
-     * @return bool
+     * @return array
      */
     public function actionRemoveConfig($siteId)
     {
@@ -62,11 +64,15 @@ abstract class ServiceControllerPrototype extends RestControllerPrototype
      * Перестроение конфига
      *
      * @param $siteId
+     * @return bool
      */
     public function actionRebuildConfig($siteId)
     {
         // удаляем файл конфигурации
+        $this->actionRemoveConfig($siteId);
+
         // воссоздаем его заново
+        return $this->actionCreateConfig($siteId);
     }
 
     /**
@@ -74,7 +80,8 @@ abstract class ServiceControllerPrototype extends RestControllerPrototype
      */
     public function actionStopService()
     {
-
+        $output = null;
+        exec("sudo service " . $this->getServiceName() . " start 2>&1", $output);
     }
 
     /**
@@ -82,6 +89,7 @@ abstract class ServiceControllerPrototype extends RestControllerPrototype
      */
     public function actionStartService()
     {
-
+        $output = null;
+        exec("sudo service " . $this->getServiceName() . " stop 2>&1", $output);
     }
 }
