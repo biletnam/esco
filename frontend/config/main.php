@@ -47,7 +47,26 @@ return [
             'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'user']
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['user']
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => [
+                        'nginx',
+                        'fpm',
+                    ],
+                    'extraPatterns' => [
+                        'POST create-config' => 'create-config',
+                        'POST remove-config' => 'remove-config',
+                        'POST rebuild-config' => 'rebuild-config',
+                        'POST stop-service' => 'stop-service',
+                        'POST start-service' => 'start-service',
+
+                    ],
+                ]
             ],
         ],
     ],

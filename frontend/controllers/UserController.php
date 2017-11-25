@@ -8,7 +8,9 @@
 namespace frontend\controllers;
 
 
-class UserController extends RestController
+use frontend\prototypes\RestControllerPrototype;
+
+class UserController extends RestControllerPrototype
 {
     public $modelClass = 'common\models\User';
 }
