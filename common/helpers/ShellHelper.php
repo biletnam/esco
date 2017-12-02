@@ -18,8 +18,6 @@ namespace common\helpers;
 class ShellHelper
 {
 
-    //TODO вынести это в конфиг
-    const USER_DIRECTORY = '/var/www/';
     /**
      * Реализация chmod
      *
@@ -94,7 +92,7 @@ class ShellHelper
     {
         self::groupAdd($group);
 
-        exec('sudo useradd -m -d ' . self::USER_DIRECTORY . '/'. $name . ' -c "' . $name . '" -g ' . $group);
+        exec('sudo useradd -m -d ' . \Yii::$app->params['userPath'] . '/'. $name . ' -c "' . $name . '" -g ' . $group);
     }
 
     /**
