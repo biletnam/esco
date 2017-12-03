@@ -31,6 +31,7 @@ return [
             ],
         ],
         'errorHandler' => [
+            'class' => 'common\exceptions\RestException',
             'errorAction' => 'site/error',
         ],
         'request' => [
@@ -51,10 +52,20 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => [
                         'user',
-                        'site',
                         'domain'
                     ]
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => [
+                        'site',
+                    ],
+                    'extraPatterns' => [
+                        'POST set-files' => 'set-files',
+                        'POST set-db' => 'set-db'
+                    ],
+                ]
             ],
         ],
     ],
