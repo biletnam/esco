@@ -1,14 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Admin
- * Date: 25.11.17
- * Time: 14:37
- */
+
 namespace frontend\controllers;
 
-
-class UserController extends RestController
+/**
+ * Class SiteController
+ * @package frontend\controllers
+ */
+class SiteController extends RestController
 {
-    public $modelClass = 'common\models\User';
+    public $modelClass = 'common\models\Site';
 }
