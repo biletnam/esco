@@ -25,13 +25,15 @@ class SiteController extends RestController
     {
         $site = Site::findOne(['id' => $siteId]);
 
+        // проверим есть ли сайт
         if (!$site instanceof Site) {
             return new RestException([
                 'message' => 'Site not found',
                 'status' => 'error'
             ]);
         }
-        
+
+
     }
 
     /**

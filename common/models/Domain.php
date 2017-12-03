@@ -37,11 +37,11 @@ class Domain extends \yii\db\ActiveRecord
                 //TODO должна быть проверка на формат домена
 
                 // проверим на наличие дупликатов
-                $countDuplicates = self::find()
+                $isDuplicatesExists = self::find()
                     ->where(['name' => $this->$attribute])
                     ->exists();
 
-                if ($countDuplicates) {
+                if ($isDuplicatesExists) {
                     $this->addError($attribute, 'Duplicate domain name');
                 }
             }],

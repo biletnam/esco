@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
- * @property integer $client_id
+ * @property integer $unix_user_id
  */
 class Site extends \yii\db\ActiveRecord
 {
@@ -27,20 +27,30 @@ class Site extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['client_id'], 'integer'],
+            [['unix_user_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['name', 'client_id'], 'safe'],
-            [['name', 'client_id'], 'required'],
+            [['name', 'unix_user_id'], 'safe'],
+            [['name', 'unix_user_id'], 'required'],
             ['name', function($attribute) {
 
                 //TODO должна быть валидация по символам.
 
-                $countDuplicates = self::find()
+                $isDuplicatesExists = self::find()
                     ->where(['name' => $this->$attribute])
                     ->exists();
 
-                if ($countDuplicates) {
+                if ($isDuplicatesExists) {
                     $this->addError($attribute, 'Duplicate site name');
+                }
+            }],
+            ['unix_user_id', function($attribute) {
+
+                $isUserExist = UnixUser::find()
+                    ->where(['id' => $this->$attribute])
+                    ->exists();
+
+                if (!$isUserExist) {
+                    $this->addError($attribute, 'Unix user not exists');
                 }
             }]
         ];
@@ -54,7 +64,7 @@ class Site extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'client_id' => 'Client ID',
+            'unix_user_id' => 'Client ID',
         ];
     }
 }

@@ -54,7 +54,8 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => [
                         'user',
-                        'domain'
+                        'domain',
+                        'unix-user'
                     ]
                 ],
                 [
