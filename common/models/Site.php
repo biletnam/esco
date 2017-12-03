@@ -29,6 +29,8 @@ class Site extends \yii\db\ActiveRecord
         return [
             [['client_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['name', 'client_id'], 'safe'],
+            [['name', 'client_id'], 'required'],
         ];
     }
 

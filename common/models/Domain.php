@@ -30,6 +30,8 @@ class Domain extends \yii\db\ActiveRecord
         return [
             [['site_id', 'is_main'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['site_id', 'is_main'], 'safe'],
+            [['site_id', 'is_main'], 'required'],
         ];
     }
 

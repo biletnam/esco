@@ -14,6 +14,12 @@ class RestController extends ActiveController
 {
     public function behaviors()
     {
+        $urlData = parse_url(\Yii::$app->request->getUrl());
+
+        if (isset($urlData['query'])) {
+            parse_str($urlData['query'], $queryParams);
+            \Yii::$app->request->bodyParams = $queryParams;
+        }
         $behaviors = parent::behaviors();
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
         return $behaviors;
