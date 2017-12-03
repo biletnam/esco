@@ -32,6 +32,30 @@ class Domain extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 255],
             [['site_id', 'is_main'], 'safe'],
             [['site_id', 'is_main'], 'required'],
+            ['name', function($attribute) {
+
+                //TODO должна быть проверка на формат домена
+
+                // проверим на наличие дупликатов
+                $countDuplicates = self::find()
+                    ->where(['name' => $this->$attribute])
+                    ->exists();
+
+                if ($countDuplicates) {
+                    $this->addError($attribute, 'Duplicate domain name');
+                }
+            }],
+            ['site_id', function($attribute) {
+
+                // проверим на наличие сайта
+                $siteExist = Site::find()
+                    ->where(['id' => $this->$attribute])
+                    ->exists();
+
+                if (!$siteExist) {
+                    $this->addError($attribute, 'Site not found');
+                }
+            }]
         ];
     }
 
@@ -46,5 +70,21 @@ class Domain extends \yii\db\ActiveRecord
             'site_id' => 'Site ID',
             'is_main' => 'Is Main',
         ];
+    }
+
+    /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        // сбрасываем основной домен для этого сайта
+        self::updateAll([
+           'is_main' => false
+        ], [
+            'site_id' => $this->site_id
+        ]);
+
+        return parent::beforeSave($insert);
     }
 }

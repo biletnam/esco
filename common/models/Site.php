@@ -31,6 +31,18 @@ class Site extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 255],
             [['name', 'client_id'], 'safe'],
             [['name', 'client_id'], 'required'],
+            ['name', function($attribute) {
+
+                //TODO должна быть валидация по символам.
+
+                $countDuplicates = self::find()
+                    ->where(['name' => $this->$attribute])
+                    ->exists();
+
+                if ($countDuplicates) {
+                    $this->addError($attribute, 'Duplicate site name');
+                }
+            }]
         ];
     }
 
