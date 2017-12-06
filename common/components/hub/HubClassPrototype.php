@@ -17,14 +17,18 @@ interface HubClassPrototype {
 
     /**
      * Установить
+     *
+     * @param $data
      * @return mixed
      */
-    public function execute();
+    public function execute($data);
 
     /**
      * Откатить
+     *
+     * @param $data
      * @return mixed
      */
-    public function rollback();
+    public function rollback($data);
 
 }

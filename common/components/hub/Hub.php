@@ -27,12 +27,19 @@ class Hub
     private $hubClasses = [];
 
     /**
+     * @var array
+     */
+    private $data = [];
+
+    /**
      * Hub constructor.
      * @param $classes
+     * @param $data
      */
-    public function __construct($classes)
+    public function __construct($classes, $data)
     {
         $this->hubClasses = $classes;
+        $this->data = $data;
     }
 
     /**
@@ -46,7 +53,7 @@ class Hub
                 if (class_exists($class['name'])) {
                     $class['object'] = new $class['name'];
                     $class['status'] = self::STATUS_PROGRESS;
-                    $class->execute();
+                    $class['object']->execute($this->data);
                     $class['status'] = self::STATUS_SUCCESS;
                 } else {
                     throw new \Exception('Class not found');
@@ -58,7 +65,7 @@ class Hub
 
             foreach ($this->hubClasses as &$class) {
                 if ($class['status'] === self::STATUS_PROGRESS) {
-                    $class['object']->rollback();
+                    $class['object']->rollback($this->data);
                 }
             }
 
