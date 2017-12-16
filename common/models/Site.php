@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property string $db_name
  * @property integer $unix_user_id
  */
 class Site extends \yii\db\ActiveRecord
@@ -28,9 +29,9 @@ class Site extends \yii\db\ActiveRecord
     {
         return [
             [['unix_user_id'], 'integer'],
-            [['name'], 'string', 'max' => 255],
+            [['name', 'db_name'], 'string', 'max' => 255],
             [['name', 'unix_user_id'], 'safe'],
-            [['name', 'unix_user_id'], 'required'],
+            [['name', 'unix_user_id', 'db_name'], 'required'],
             ['name', function($attribute) {
 
                 //TODO должна быть валидация по символам.
@@ -65,6 +66,7 @@ class Site extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'unix_user_id' => 'Client ID',
+            'db_name' => 'DB name'
         ];
     }
 }
