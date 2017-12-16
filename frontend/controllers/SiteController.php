@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 use common\exceptions\RestException;
 use common\models\Site;
+use frontend\prototypes\RestControllerPrototype;
 use yii\base\Exception;
 use yii\web\HttpException;
 
@@ -10,7 +11,7 @@ use yii\web\HttpException;
  * Class SiteController
  * @package frontend\controllers
  */
-class SiteController extends RestController
+class SiteController extends RestControllerPrototype
 {
     public $modelClass = 'common\models\Site';
 

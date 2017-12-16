@@ -4,6 +4,7 @@ namespace frontend\controllers;
 use common\exceptions\RestException;
 use common\models\Site;
 use common\models\TaskQueue;
+use frontend\prototypes\RestControllerPrototype;
 use yii\base\Exception;
 use yii\web\HttpException;
 
@@ -11,7 +12,7 @@ use yii\web\HttpException;
  * Class TaskController
  * @package frontend\controllers
  */
-class TaskController extends RestController
+class TaskController extends RestControllerPrototype
 {
     /**
      * Отдает статус задачи по ее id

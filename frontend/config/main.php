@@ -68,7 +68,23 @@ return [
                         'POST set-files' => 'set-files',
                         'POST set-db' => 'set-db'
                     ],
-                ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => [
+                        'nginx',
+                        'fpm',
+                    ],
+                    'extraPatterns' => [
+                        'POST create-config' => 'create-config',
+                        'POST remove-config' => 'remove-config',
+                        'POST rebuild-config' => 'rebuild-config',
+                        'POST stop-service' => 'stop-service',
+                        'POST start-service' => 'start-service',
+
+                    ],
+                ],
             ],
         ],
     ],
