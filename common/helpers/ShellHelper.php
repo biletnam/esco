@@ -128,4 +128,21 @@ class ShellHelper
         exec("groupdel $group");
     }
 
+    /**
+     * Выполнение команды
+     *
+     * @param $command
+     * @return array
+     */
+    public static function execute($command)
+    {
+        $return = $output = null;
+        exec('sudo ' . $command . ' 2>&1', $output, $return);
+
+        return [
+            'output' => $output,
+            'return' => $return
+        ];
+    }
+
 }
