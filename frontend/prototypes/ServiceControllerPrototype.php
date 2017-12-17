@@ -7,7 +7,11 @@
  */
 namespace frontend\prototypes;
 
-use yii\web\HttpException;
+use common\helpers\ShellHelper;
+use common\models\Domain;
+use common\models\Site;
+use common\models\UnixUser;
+use yii\helpers\ArrayHelper;
 
 abstract class ServiceControllerPrototype extends RestControllerPrototype
 {
@@ -35,29 +39,52 @@ abstract class ServiceControllerPrototype extends RestControllerPrototype
     abstract protected function getServiceName();
 
     /**
+     * Останавливает сервис
+     */
+    public function stopService()
+    {
+        ShellHelper::execute("service {$this->getServiceName()} stop");
+    }
+
+    /**
+     * Запускает сервис
+     */
+    public function startService()
+    {
+        ShellHelper::execute("service {$this->getServiceName()} start");
+    }
+
+    /**
      * Создает конфиг
      *
      * @param $siteId
-     * @return array
+     * @throws \Exception
      */
-    public function actionCreateConfig($siteId)
-    {
-        // достанем сайт по id
-        // спарсим данные в шаблон
-        // запишем данные в конфиг
-        // файл назвать по id сайта
-    }
+    abstract public function actionCreateConfig($siteId);
 
     /**
      * Удаляет конфиг
      *
      * @param $siteId
      * @return array
+     * @throws \Exception
      */
     public function actionRemoveConfig($siteId)
     {
         // проверяем наличие файла конфигурации
-        // удалим его
+        if (file_exists($this->getPath() . "/{$siteId}.conf")) {
+            // удалим его
+            ShellHelper::rm($this->getPath() . "/{$siteId}.conf");
+        }
+
+        // проверим удалился ли конфиг
+        if (file_exists($this->getPath() . "/{$siteId}.conf")) {
+            throw new \Exception("Can't remove {$this->getServiceName()} config");
+        }
+
+        return [
+            'message' => "{$this->getServiceName()} config removed"
+        ];
     }
 
     /**
@@ -76,20 +103,11 @@ abstract class ServiceControllerPrototype extends RestControllerPrototype
     }
 
     /**
-     * Останавливает сервис
+     * Перезапускает сервис
      */
-    public function actionStopService()
+    public function actionReloadConfig()
     {
-        $output = null;
-        exec("sudo service " . $this->getServiceName() . " start 2>&1", $output);
-    }
-
-    /**
-     * Запускает сервис
-     */
-    public function actionStartService()
-    {
-        $output = null;
-        exec("sudo service " . $this->getServiceName() . " stop 2>&1", $output);
+        $this->stopService();
+        $this->startService();
     }
 }

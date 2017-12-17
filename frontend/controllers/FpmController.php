@@ -8,13 +8,14 @@
 
 namespace frontend\controllers;
 
+use common\helpers\ShellHelper;
 use frontend\prototypes\ServiceControllerPrototype;
 
 class FpmController extends ServiceControllerPrototype {
 
     protected function getPath()
     {
-        return '/var/esco/fpm';
+        return \Yii::$app->params['fpmConfigPath'];
     }
 
     protected function getTemplate()
@@ -24,6 +25,11 @@ class FpmController extends ServiceControllerPrototype {
 
     protected function getServiceName()
     {
-        return 'php-fpm';
+        return 'php5-fpm';
+    }
+
+    public function actionReloadConfig()
+    {
+        ShellHelper::execute("service {$this->getServiceName()} reload");
     }
 }

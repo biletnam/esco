@@ -80,9 +80,7 @@ return [
                         'POST create-config' => 'create-config',
                         'POST remove-config' => 'remove-config',
                         'POST rebuild-config' => 'rebuild-config',
-                        'POST stop-service' => 'stop-service',
-                        'POST start-service' => 'start-service',
-
+                        'POST restart-service' => 'reload-config',
                     ],
                 ],
             ],

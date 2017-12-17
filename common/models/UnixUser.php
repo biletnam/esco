@@ -19,6 +19,16 @@ use Yii;
  */
 class UnixUser extends \yii\db\ActiveRecord
 {
+    const SITES_PATH = '/sites';
+    const SYSTEM_PATH = '/system';
+    const TMP_PATH = '/system/tmp';
+    const LOG_PATH = '/system/log';
+    const SESSION_PATH = '/system/session';
+    const BACKUPS_PATH = '/system/backups';
+    const BACKUPS_FILES_PATH = '/system/backups/files';
+    const BACKUPS_DB_PATH = '/system/backups/db';
+    const STATS_PATH = '/stats';
+
     /**
      * @inheritdoc
      */
@@ -48,14 +58,15 @@ class UnixUser extends \yii\db\ActiveRecord
     public static function getUserDirs($rootPath)
     {
         return [
-            $rootPath . '/sites',
-            $rootPath . '/system',
-            $rootPath . '/system/tmp',
-            $rootPath . '/system/session',
-            $rootPath . '/system/backups',
-            $rootPath . '/system/backups/files',
-            $rootPath . '/system/backups/db',
-            $rootPath . '/stats'
+            $rootPath . self::SITES_PATH,
+            $rootPath . self::SYSTEM_PATH,
+            $rootPath . self::TMP_PATH,
+            $rootPath . self::LOG_PATH,
+            $rootPath . self::SYSTEM_PATH,
+            $rootPath . self::BACKUPS_PATH,
+            $rootPath . self::BACKUPS_FILES_PATH,
+            $rootPath . self::BACKUPS_DB_PATH,
+            $rootPath . self::STATS_PATH
         ];
     }
 
