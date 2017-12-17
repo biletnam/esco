@@ -83,7 +83,7 @@ class NginxController extends ServiceControllerPrototype {
             'siteName' => $site->name . '.' . \Yii::$app->params['webPath'],
             'siteAliases' => array_merge([$site->name . '.' . \Yii::$app->params['webPath']], $domains),
             'tmpPath' => \Yii::$app->params['userPath'] . '/' . $unixUser->name . UnixUser::TMP_PATH,
-            'logPath' => \Yii::$app->params['userPath'] . '/' . $unixUser->name . UnixUser::LOG_PATH . '/' . $site->name . '.log',
+            'logPath' => \Yii::$app->params['userPath'] . '/' . $unixUser->name . UnixUser::LOG_PATH . '/' . $site->name . '.access.log',
         ]);
 
         // запишем данные в конфиг
