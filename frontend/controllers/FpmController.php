@@ -15,6 +15,10 @@ use common\models\UnixUser;
 use frontend\prototypes\ServiceControllerPrototype;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class FpmController
+ * @package frontend\controllers
+ */
 class FpmController extends ServiceControllerPrototype {
 
     protected function getPath()

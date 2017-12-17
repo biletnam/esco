@@ -15,6 +15,10 @@ use common\models\UnixUser;
 use frontend\prototypes\ServiceControllerPrototype;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class NginxController
+ * @package frontend\controllers
+ */
 class NginxController extends ServiceControllerPrototype {
 
     /**

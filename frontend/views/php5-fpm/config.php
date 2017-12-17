@@ -5,10 +5,10 @@
  * Date: 17.12.2017
  * Time: 14:19
  *
- * @property string $unixUserName
- * @property string $unixUserName
- * @property string $slowLogPath
- * @property string $tmpPath
+ * @var string $unixUserName
+ * @var string $unixUserGroup
+ * @var string $slowLogPath
+ * @var string $tmpPath
  */
 
 ?>

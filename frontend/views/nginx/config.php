@@ -5,10 +5,10 @@
  * Date: 17.12.2017
  * Time: 12:43
  *
- * @property string $siteName
- * @property array $siteAliases
- * @property string $tmpPath
- * @property string $logPath
+ * @var string $siteName
+ * @var array $siteAliases
+ * @var string $tmpPath
+ * @var string $logPath
  */
 ?>
 

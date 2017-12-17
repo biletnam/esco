@@ -8,11 +8,11 @@
 namespace frontend\prototypes;
 
 use common\helpers\ShellHelper;
-use common\models\Domain;
-use common\models\Site;
-use common\models\UnixUser;
-use yii\helpers\ArrayHelper;
 
+/**
+ * Class ServiceControllerPrototype
+ * @package frontend\prototypes
+ */
 abstract class ServiceControllerPrototype extends RestControllerPrototype
 {
     public $modelClass = '';

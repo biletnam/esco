@@ -4,8 +4,6 @@ namespace frontend\controllers;
 use common\exceptions\RestException;
 use common\models\Site;
 use frontend\prototypes\RestControllerPrototype;
-use yii\base\Exception;
-use yii\web\HttpException;
 
 /**
  * Class SiteController
