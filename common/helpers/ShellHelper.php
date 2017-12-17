@@ -138,7 +138,7 @@ class ShellHelper
     {
         $return = $output = null;
         exec('sudo ' . $command . ' 2>&1', $output, $return);
-
+var_dump('sudo ' . $command . ' 2>&1');
         return [
             'output' => $output,
             'return' => $return
