@@ -66,7 +66,8 @@ return [
                     ],
                     'extraPatterns' => [
                         'POST set-files' => 'set-files',
-                        'POST set-db' => 'set-db'
+                        'POST set-db' => 'set-db',
+                        'POST create-dirs' => 'create-dirs'
                     ],
                 ],
                 [
@@ -80,7 +81,18 @@ return [
                         'POST create-config' => 'create-config',
                         'POST remove-config' => 'remove-config',
                         'POST rebuild-config' => 'rebuild-config',
-                        'POST restart-service' => 'reload-config',
+                        'POST restart-service' => 'reload',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => [
+                        'unix-user'
+                    ],
+                    'extraPatterns' => [
+                        'POST create-config' => 'create',
+                        'POST remove-config' => 'db-user-create'
                     ],
                 ],
             ],

@@ -2,7 +2,9 @@
 
 namespace frontend\controllers;
 use common\exceptions\RestException;
+use common\helpers\ShellHelper;
 use common\models\Site;
+use common\models\UnixUser;
 use frontend\prototypes\RestControllerPrototype;
 
 /**
@@ -36,10 +38,45 @@ class SiteController extends RestControllerPrototype
     }
 
     /**
-     * Скачивает db.sql, создает нового пользователя БД и распаковывает туда базу
+     * Скачивает db.sql и распаковывает туда базу
+     *
+     * @param $url
+     * @param $siteId
      */
     public function actionSetDb($url, $siteId)
     {
 
+    }
+
+    /**
+     * Создает директорию для сайта
+     *
+     * @param $siteId
+     */
+    public function actionCreateDirs($siteId)
+    {
+        $site = Site::findOne($siteId);
+
+        if (!$site instanceof Site) {
+            throw new \Exception('Site not found');
+        }
+
+        $unixUser = UnixUser::findOne($site->unix_user_id);
+
+        if (!$unixUser instanceof UnixUser) {
+            throw new \Exception('Unix user not found');
+        }
+
+        $sitePath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . '/' . UnixUser::SITES_PATH . '/' . $site->name;
+
+        ShellHelper::mkdir($sitePath);
+
+        if (!file_exists($sitePath)) {
+            throw new \Exception("Can't create site path");
+        }
+
+        return [
+            'message' => 'Site directories created'
+        ];
     }
 }

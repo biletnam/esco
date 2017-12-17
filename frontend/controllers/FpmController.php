@@ -36,7 +36,7 @@ class FpmController extends ServiceControllerPrototype {
         return 'php5-fpm';
     }
 
-    public function actionReloadConfig()
+    public function actionReload()
     {
         ShellHelper::execute("service {$this->getServiceName()} reload");
     }

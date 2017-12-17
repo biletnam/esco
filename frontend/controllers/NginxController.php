@@ -48,7 +48,7 @@ class NginxController extends ServiceControllerPrototype {
     /**
      *
      */
-    public function actionReloadConfig()
+    public function actionReload()
     {
        ShellHelper::execute("service {$this->getServiceName()} -s reload");
     }

@@ -85,15 +85,4 @@ class UnixUser extends \yii\db\ActiveRecord
             'home_path' => 'Home Path',
         ];
     }
-
-    public function beforeSave($insert)
-    {
-        if ($insert) {
-            $this->db_user = $this->name . '_user';
-            $this->db_pass = Yii::$app->security->generateRandomString(9);
-            $this->db_host = Yii::$app->params['databaseHost'];
-            $this->home_path = Yii::$app->params['userPath'] . '/' . $this->name;
-        }
-        return parent::beforeSave($insert);
-    }
 }
