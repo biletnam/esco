@@ -59,6 +59,9 @@ class SiteController extends RestControllerPrototype
         ShellHelper::execute("tar -xvzf {$tmpFile} -C {$sitePath}");
 
         // TODO проверка на статус распаковки
+
+        ShellHelper::rm($tmpFile);
+
         return [
             'message' => 'Files unziped'
         ];
@@ -72,7 +75,41 @@ class SiteController extends RestControllerPrototype
      */
     public function actionSetDb($url, $siteId)
     {
+        $site = Site::findOne(['id' => $siteId]);
 
+        // проверим есть ли сайт
+        if (!$site instanceof Site) {
+            throw new \Exception('Site not found');
+        }
+
+        $unixUser = UnixUser::findOne($site->unix_user_id);
+
+        if (!$unixUser instanceof UnixUser) {
+            throw new \Exception('Unix user not found');
+        }
+
+        // проверим есть ли tmp директория
+        $tmpPath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::TMP_PATH;
+
+        if (!file_exists($tmpPath)) {
+            throw new \Exception('Tmp directory not found');
+        }
+
+        $tmpFile =  $tmpPath . '/' . time() . '_' . rand(0,999) . '.sql';
+        FileHelper::getFileFromUrl($url, $tmpFile);
+
+        if (!file_exists($tmpFile)) {
+            throw new \Exception('Can\'t download file');
+        }
+
+        // TODO создать БД
+        // TODO импорт БД
+
+        ShellHelper::rm($tmpFile);
+
+        return [
+            'message' => 'DB dump installed'
+        ];
     }
 
     /**

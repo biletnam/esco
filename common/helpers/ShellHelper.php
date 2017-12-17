@@ -73,12 +73,12 @@ class ShellHelper
     /**
      * Реализация удаления
      *
-     * @param $dir
+     * @param $file
      */
-    public static function rm($dir)
+    public static function rm($file)
     {
-        if (file_exists($dir)) {
-            exec("sudo rm -rf $dir");
+        if (file_exists($file)) {
+            exec("sudo rm -rf $file");
         }
     }
 
