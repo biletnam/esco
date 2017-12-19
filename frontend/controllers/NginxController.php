@@ -30,14 +30,6 @@ class NginxController extends ServiceControllerPrototype {
     }
 
     /**
-     *
-     */
-    protected function getTemplate()
-    {
-
-    }
-
-    /**
      * @return string
      */
     protected function getServiceName()

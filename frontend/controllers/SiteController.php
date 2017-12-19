@@ -145,4 +145,38 @@ class SiteController extends RestControllerPrototype
             'message' => 'Site directories created'
         ];
     }
+
+    /**
+     * Удаление директории сайта
+     *
+     * @param $siteId
+     * @return array
+     * @throws \Exception
+     */
+    public function actionRemoveDirs($siteId)
+    {
+        $site = Site::findOne($siteId);
+
+        if (!$site instanceof Site) {
+            throw new \Exception('Site not found');
+        }
+
+        $unixUser = UnixUser::findOne($site->unix_user_id);
+
+        if (!$unixUser instanceof UnixUser) {
+            throw new \Exception('Unix user not found');
+        }
+
+        $sitePath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . '/' . UnixUser::SITES_PATH . '/' . $site->name;
+
+        ShellHelper::rm($sitePath);
+
+        if (file_exists($sitePath)) {
+            throw new \Exception("Can't remove site path");
+        }
+
+        return [
+            'message' => 'Site directories removed'
+        ];
+    }
 }

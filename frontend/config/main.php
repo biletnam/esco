@@ -67,7 +67,8 @@ return [
                     'extraPatterns' => [
                         'POST set-files' => 'set-files',
                         'POST set-db' => 'set-db',
-                        'POST create-dirs' => 'create-dirs'
+                        'POST create-dirs' => 'create-dirs',
+                        'POST remove-dirs' => 'remove-dirs'
                     ],
                 ],
                 [

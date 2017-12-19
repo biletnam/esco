@@ -25,13 +25,6 @@ abstract class ServiceControllerPrototype extends RestControllerPrototype
     abstract protected function getPath();
 
     /**
-     * Возвращает путь до шаблона конфига
-     *
-     * @return string
-     */
-    abstract protected function getTemplate();
-
-    /**
      * Отдает имя сервиса
      *
      * @return string

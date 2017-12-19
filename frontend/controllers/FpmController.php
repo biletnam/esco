@@ -26,11 +26,6 @@ class FpmController extends ServiceControllerPrototype {
         return \Yii::$app->params['fpmConfigPath'];
     }
 
-    protected function getTemplate()
-    {
-
-    }
-
     protected function getServiceName()
     {
         return 'php5-fpm';
