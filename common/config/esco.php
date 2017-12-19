@@ -1,9 +1,2 @@
 <?php
-return [
-    // путь к папку пользователей
-    'userPath' => '/var/www',
-    'fpmConfigPath' => '/var/config/fpm',
-    'nginxConfigPath' => '/var/config/nginx',
-    'defaultDatabaseHost' => 'localhost',
-    'webPath' => 'esco.cc'
-];
+return [];
