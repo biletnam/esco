@@ -5,7 +5,8 @@ $params = array_merge(
     require __DIR__ . '/params.php',
     require __DIR__ . '/params-local.php',
     require __DIR__ . '/../../common/config/esco.php',
-    require __DIR__ . '/../../common/config/esco-local.php'
+    require __DIR__ . '/../../common/config/esco-local.php',
+    require __DIR__ . '/../../common/config/backend-local.php'
 );
 
 return [
