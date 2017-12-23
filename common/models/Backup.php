@@ -59,12 +59,44 @@ class Backup extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Создает бекап БД
+     *
+     * @param $siteId
+     * @param $type
+     */
     public static function createDbBackup($siteId, $type)
     {
 
     }
 
+    /**
+     * Создает бекап файлов
+     *
+     * @param $siteId
+     * @param $type
+     */
     public static function createFilesBackup($siteId, $type)
+    {
+
+    }
+
+    /**
+     * Разворачивает бекап БД
+     *
+     * @param $backupId
+     */
+    public static function restoreDbBackup($backupId)
+    {
+
+    }
+
+    /**
+     * Разворачивает бекап файлов
+     *
+     * @param $backupId
+     */
+    public static function restoreFilesBackup($backupId)
     {
 
     }

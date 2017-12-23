@@ -56,6 +56,8 @@ class SiteController extends RestControllerPrototype
 
         // выполнить распаковку файла.
         $sitePath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::SITES_PATH . '/' .$site->name;
+
+        //TODO поставить задачу в таскменеджер. Возможно использовать распаковку бекапа
         ShellHelper::execute("tar -xvzf {$tmpFile} -C {$sitePath}");
 
         // TODO проверка на статус распаковки
@@ -103,7 +105,7 @@ class SiteController extends RestControllerPrototype
         }
 
         // TODO создать БД
-        // TODO импорт БД
+        // TODO импорт БД. Поставить задачу таскменеджер
 
         ShellHelper::rm($tmpFile);
 

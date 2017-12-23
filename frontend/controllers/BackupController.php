@@ -23,17 +23,28 @@ class BackupController extends RestControllerPrototype
      *
      * @param $siteId
      * @param $typeId
+     * @return array
      * @throws \Exception
      */
     public function actionCreate($siteId, $typeId)
     {
         if ($typeId === Backup::TYPE_DB) {
-            Backup::createDbBackup($siteId, $typeId);
+            // TODO должен ставить задачу в taskManager
+            $file = Backup::createDbBackup($siteId, $typeId);
         } elseif ($typeId === Backup::TYPE_FILES) {
-            Backup::createFilesBackup($siteId, $typeId);
+            // TODO должен ставить задачу в taskManager
+            $file = Backup::createFilesBackup($siteId, $typeId);
         } else {
             throw new \Exception('Invalid backup type');
         }
+
+        if (!file_exists($file)) {
+            throw new \Exception('Can\'t create backup');
+        }
+
+        return [
+            'message' => 'Backup created'
+        ];
     }
 
     /**
