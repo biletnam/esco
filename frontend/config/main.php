@@ -97,6 +97,17 @@ return [
                         'POST remove-config' => 'db-user-create'
                     ],
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'pluralize' => false,
+                    'controller' => [
+                        'backup',
+                    ],
+                    'extraPatterns' => [
+                        'POST create' => 'create',
+                        'POST restore' => 'restore'
+                    ],
+                ],
             ],
         ],
     ],
