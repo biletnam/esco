@@ -71,7 +71,7 @@ class SiteController extends RestControllerPrototype
      * @return array
      * @throws \Exception
      */
-    public function actionImportFiles($file, $siteId)
+    public function actionImportArchive($file, $siteId)
     {
         $site = Site::findOne(['id' => $siteId]);
 
