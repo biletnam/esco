@@ -66,8 +66,10 @@ return [
                         'site',
                     ],
                     'extraPatterns' => [
-                        'POST set-files' => 'set-files',
-                        'POST set-db' => 'set-db',
+                        'POST download-archive' => 'download-archive',
+                        'POST download-db' => 'download-db',
+                        'POST import-archive' => 'import-archive',
+                        'POST import-db' => 'import-db',
                         'POST create-dirs' => 'create-dirs',
                         'POST remove-dirs' => 'remove-dirs'
                     ],

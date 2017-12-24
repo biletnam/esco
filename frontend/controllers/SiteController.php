@@ -2,9 +2,11 @@
 
 namespace frontend\controllers;
 use common\exceptions\RestException;
+use common\helpers\BackupHelper;
 use common\helpers\FileHelper;
 use common\helpers\ShellHelper;
 use common\models\Site;
+use common\models\TaskQueue;
 use common\models\UnixUser;
 use frontend\prototypes\RestControllerPrototype;
 use yii\httpclient\Client;
@@ -18,14 +20,14 @@ class SiteController extends RestControllerPrototype
     public $modelClass = 'common\models\Site';
 
     /**
-     * Скачивает архив с файлами, распаковывает файлы в директорию
+     * Скачивает архив с файлами
      *
      * @param $url
      * @param $siteId
      * @return array
      * @throws \Exception
      */
-    public function actionSetFiles($url, $siteId)
+    public function actionDownloadArchive($url, $siteId)
     {
         $site = Site::findOne(['id' => $siteId]);
 
@@ -48,34 +50,86 @@ class SiteController extends RestControllerPrototype
         }
 
         $tmpFile =  $tmpPath . '/' . time() . '_' . rand(0,999) . '.tar.gz';
-        FileHelper::getFileFromUrl($url, $tmpFile);
 
-        if (!file_exists($tmpFile)) {
-            throw new \Exception('Can\'t download file');
+        // Поставить задачу в таскменеджер
+        $result = TaskQueue::createTask(FileHelper::getNamespace() . 'FileHelper', 'getFileFromUrl', [
+            'url' => $url,
+            'saveTo' => $tmpFile
+        ]);
+
+        if (!$result) {
+            throw new \Exception('Can\'t create task');
         }
 
-        // выполнить распаковку файла.
-        $sitePath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::SITES_PATH . '/' .$site->name;
-
-        //TODO поставить задачу в таскменеджер. Возможно использовать распаковку бекапа
-        ShellHelper::execute("tar -xvzf {$tmpFile} -C {$sitePath}");
-
-        // TODO проверка на статус распаковки
-
-        ShellHelper::rm($tmpFile);
-
         return [
-            'message' => 'Files unziped'
+            'message' => 'Task created',
+            'taskId' => $result
         ];
     }
 
     /**
-     * Скачивает db.sql и распаковывает туда базу
+     * Импортирует файлы из архива в директорию сайта
+     *
+     * @param $file
+     * @param $siteId
+     * @return array
+     * @throws \Exception
+     */
+    public function actionImportFiles($file, $siteId)
+    {
+        $site = Site::findOne(['id' => $siteId]);
+
+        // проверим есть ли сайт
+        if (!$site instanceof Site) {
+            throw new \Exception('Site not found');
+        }
+
+        // проверим есть ли файл
+        if (!file_exists($file)) {
+            throw new \Exception('File not exists');
+        }
+
+        // проверим есть ли пользователь
+        $unixUser = UnixUser::findOne($site->unix_user_id);
+
+        if (!$unixUser instanceof UnixUser) {
+            throw new \Exception('Unix user not found');
+        }
+
+        // проверим есть ли tmp директория
+        $sitePath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::SITES_PATH . '/' . $site->name;
+
+        if (!file_exists($sitePath)) {
+            throw new \Exception('Site directory not found');
+        }
+
+        // TODO почистить директорию наверное
+
+        // Поставить задачу в таскменеджер
+        $result = TaskQueue::createTask(BackupHelper::getNamespace() . 'BackupHelper', 'restoreFileBackup', [
+            'path' => $sitePath,
+            'fileName' => $file
+        ]);
+
+        if (!$result) {
+            throw new \Exception('Can\'t create task');
+        }
+
+        return [
+            'message' => 'Task created',
+            'taskId' => $result
+        ];
+    }
+
+    /**
+     * Ставит задачу на скачивание БД в таскменеджер
      *
      * @param $url
      * @param $siteId
+     * @return array
+     * @throws \Exception
      */
-    public function actionSetDb($url, $siteId)
+    public function actionDownloadDb($url, $siteId)
     {
         $site = Site::findOne(['id' => $siteId]);
 
@@ -97,20 +151,61 @@ class SiteController extends RestControllerPrototype
             throw new \Exception('Tmp directory not found');
         }
 
-        $tmpFile =  $tmpPath . '/' . time() . '_' . rand(0,999) . '.sql';
-        FileHelper::getFileFromUrl($url, $tmpFile);
+        $tmpFile = $tmpPath . '/' . time() . '_' . rand(0,999) . '.sql';
 
-        if (!file_exists($tmpFile)) {
-            throw new \Exception('Can\'t download file');
+        // Поставить задачу в таскменеджер
+        $result = TaskQueue::createTask(FileHelper::getNamespace() . 'FileHelper', 'getFileFromUrl', [
+            'url' => $url,
+            'saveTo' => $tmpFile
+        ]);
+
+        if (!$result) {
+            throw new \Exception('Can\'t create task');
+        }
+
+        return [
+            'message' => 'Task created',
+            'taskId' => $result
+        ];
+    }
+
+    /**
+     * Импортирует в БД файл
+     *
+     * @param $file
+     * @param $siteId
+     * @return array
+     * @throws \Exception
+     */
+    public function actionImportDb($file, $siteId)
+    {
+        $site = Site::findOne(['id' => $siteId]);
+
+        // проверим есть ли сайт
+        if (!$site instanceof Site) {
+            throw new \Exception('Site not found');
+        }
+
+        // проверим есть ли файл
+        if (!file_exists($file)) {
+            throw new \Exception('File not exists');
         }
 
         // TODO создать БД
-        // TODO импорт БД. Поставить задачу таскменеджер
 
-        ShellHelper::rm($tmpFile);
+        // Поставить задачу в таскменеджер
+        $result = TaskQueue::createTask(BackupHelper::getNamespace() . 'BackupHelper', 'restoreDbBackup', [
+            'dbName' => $site->db_name,
+            'fileName' => $file
+        ]);
+
+        if (!$result) {
+            throw new \Exception('Can\'t create task');
+        }
 
         return [
-            'message' => 'DB dump installed'
+            'message' => 'Task created',
+            'taskId' => $result
         ];
     }
 
