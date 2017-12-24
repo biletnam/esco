@@ -113,5 +113,11 @@ return [
             ],
         ],
     ],
+    'on beforeRequest' => function () {
+        $handler = new \common\exceptions\RestException();
+        \Yii::$app->set('errorHandler', $handler);
+        //необходимо вызывать register, это обязательный метод для регистрации обработчика
+        $handler->register();
+    },
     'params' => $params,
 ];

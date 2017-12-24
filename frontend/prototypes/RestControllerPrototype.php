@@ -7,7 +7,6 @@
  */
 namespace frontend\prototypes;
 
-use yii\base\Exception;
 use yii\rest\ActiveController;
 use yii\web\Response;
 

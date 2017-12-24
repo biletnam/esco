@@ -112,7 +112,7 @@ class Site extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         // придумаем имя БД если это вставка
-        if ($insert) {
+        if ($insert && $this->db_name === null) {
             $this->db_name = $this->name . '_' . time() . '_db';
         }
 

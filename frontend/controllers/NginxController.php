@@ -60,17 +60,13 @@ class NginxController extends ServiceControllerPrototype {
         }
 
         // получим домены
-        $domains = Domain::find()
-            ->where(['site_id' => $siteId])
+        $domains = $site->getDomains()
             ->asArray()
             ->all();
 
         $domains = ArrayHelper::getColumn($domains, 'name');
 
-        // получим unix пользователя
-        $unixUser = UnixUser::findOne($site->unix_user_id);
-
-        if (!$unixUser instanceof UnixUser) {
+        if (!$site->unixUser instanceof UnixUser) {
             throw new \Exception('Unix user not found');
         }
 
@@ -78,8 +74,8 @@ class NginxController extends ServiceControllerPrototype {
         $configContent = $this->renderFile("@app/views/{$this->getServiceName()}/config.php", [
             'siteName' => $site->name . '.' . \Yii::$app->params['webPath'],
             'siteAliases' => array_merge([$site->name . '.' . \Yii::$app->params['webPath']], $domains),
-            'tmpPath' => \Yii::$app->params['userPath'] . '/' . $unixUser->name . UnixUser::TMP_PATH,
-            'logPath' => \Yii::$app->params['userPath'] . '/' . $unixUser->name . UnixUser::LOG_PATH . '/' . $site->name . '.access.log',
+            'tmpPath' => \Yii::$app->params['userPath'] . '/' . $site->unixUser->name . UnixUser::TMP_PATH,
+            'logPath' => \Yii::$app->params['userPath'] . '/' . $site->unixUser->name . UnixUser::LOG_PATH . '/' . $site->name . '.access.log',
         ]);
 
         // запишем данные в конфиг

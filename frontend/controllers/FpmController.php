@@ -9,11 +9,9 @@
 namespace frontend\controllers;
 
 use common\helpers\ShellHelper;
-use common\models\Domain;
 use common\models\Site;
 use common\models\UnixUser;
 use frontend\prototypes\ServiceControllerPrototype;
-use yii\helpers\ArrayHelper;
 
 /**
  * Class FpmController
@@ -45,27 +43,16 @@ class FpmController extends ServiceControllerPrototype {
             throw new \Exception('Site not found');
         }
 
-        // получим домены
-        $domains = Domain::find()
-            ->where(['site_id' => $siteId])
-            ->asArray()
-            ->all();
-
-        $domains = ArrayHelper::getColumn($domains, 'name');
-
-        // получим unix пользователя
-        $unixUser = UnixUser::findOne($site->unix_user_id);
-
-        if (!$unixUser instanceof UnixUser) {
+        if (!$site->unixUser instanceof UnixUser) {
             throw new \Exception('Unix user not found');
         }
 
         // спарсим данные в шаблон
         $configContent = $this->renderFile("@app/views/{$this->getServiceName()}/config.php", [
-            'unixUserName' => $unixUser->name,
-            'unixUserGroup' => $unixUser->name,
-            'tmpPath' => \Yii::$app->params['userPath'] . '/' . $unixUser->name . UnixUser::TMP_PATH,
-            'slowLogPath' => \Yii::$app->params['userPath'] . '/' . $unixUser->name . UnixUser::LOG_PATH . '/' . $site->name . '.slow.log',
+            'unixUserName' => $site->unixUser->name,
+            'unixUserGroup' => $site->unixUser->name,
+            'tmpPath' => \Yii::$app->params['userPath'] . '/' . $site->unixUser->name . UnixUser::TMP_PATH,
+            'slowLogPath' => \Yii::$app->params['userPath'] . '/' . $site->unixUser->name . UnixUser::LOG_PATH . '/' . $site->name . '.slow.log',
         ]);
 
         // запишем данные в конфиг
