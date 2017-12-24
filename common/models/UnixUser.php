@@ -16,6 +16,7 @@ use Yii;
  * @property string $db_host
  * @property string $name
  * @property string $home_path
+ * @property string $sites
  */
 class UnixUser extends \yii\db\ActiveRecord
 {
@@ -84,5 +85,13 @@ class UnixUser extends \yii\db\ActiveRecord
             'name' => 'Name',
             'home_path' => 'Home Path',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSites()
+    {
+        return $this->hasMany(Site::className(), ['unix_user_id' => 'id']);
     }
 }

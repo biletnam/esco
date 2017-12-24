@@ -12,6 +12,8 @@ use Yii;
  * @property string $db_name
  * @property integer $unix_user_id
  * @property UnixUser $unixUser
+ * @property Domain $domains
+ * @property Backup $backups
  */
 class Site extends \yii\db\ActiveRecord
 {
@@ -77,5 +79,21 @@ class Site extends \yii\db\ActiveRecord
     public function getUnixUser()
     {
         return $this->hasOne(UnixUser::className(), ['id' => 'unix_user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDomains()
+    {
+        return $this->hasMany(Domain::className(), ['site_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBackups()
+    {
+        return $this->hasMany(Backup::className(), ['site_id' => 'id']);
     }
 }
