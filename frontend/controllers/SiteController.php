@@ -1,7 +1,6 @@
 <?php
 
 namespace frontend\controllers;
-use common\exceptions\RestException;
 use common\helpers\BackupHelper;
 use common\helpers\FileHelper;
 use common\helpers\ShellHelper;
@@ -9,7 +8,6 @@ use common\models\Site;
 use common\models\TaskQueue;
 use common\models\UnixUser;
 use frontend\prototypes\RestControllerPrototype;
-use yii\httpclient\Client;
 
 /**
  * Class SiteController
@@ -36,14 +34,12 @@ class SiteController extends RestControllerPrototype
             throw new \Exception('Site not found');
         }
 
-        $unixUser = UnixUser::findOne($site->unix_user_id);
-
-        if (!$unixUser instanceof UnixUser) {
+        if (!$site->unixUser instanceof UnixUser) {
             throw new \Exception('Unix user not found');
         }
 
         // проверим есть ли tmp директория
-        $tmpPath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::TMP_PATH;
+        $tmpPath = \Yii::$app->params['userPath'] . '/' . $site->unixUser->home_path . UnixUser::TMP_PATH;
 
         if (!file_exists($tmpPath)) {
             throw new \Exception('Tmp directory not found');
@@ -90,14 +86,12 @@ class SiteController extends RestControllerPrototype
         }
 
         // проверим есть ли пользователь
-        $unixUser = UnixUser::findOne($site->unix_user_id);
-
-        if (!$unixUser instanceof UnixUser) {
+        if (!$site->unixUser instanceof UnixUser) {
             throw new \Exception('Unix user not found');
         }
 
         // проверим есть ли директория сайта
-        $sitePath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::SITES_PATH . '/' . $site->name;
+        $sitePath = \Yii::$app->params['userPath'] . '/' . $site->unixUser->home_path . UnixUser::SITES_PATH . '/' . $site->name;
 
         if (!file_exists($sitePath)) {
             throw new \Exception('Site directory not found');
@@ -138,14 +132,12 @@ class SiteController extends RestControllerPrototype
             throw new \Exception('Site not found');
         }
 
-        $unixUser = UnixUser::findOne($site->unix_user_id);
-
-        if (!$unixUser instanceof UnixUser) {
+        if (!$site->unixUser instanceof UnixUser) {
             throw new \Exception('Unix user not found');
         }
 
         // проверим есть ли tmp директория
-        $tmpPath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::TMP_PATH;
+        $tmpPath = \Yii::$app->params['userPath'] . '/' . $site->unixUser->home_path . UnixUser::TMP_PATH;
 
         if (!file_exists($tmpPath)) {
             throw new \Exception('Tmp directory not found');
@@ -224,13 +216,11 @@ class SiteController extends RestControllerPrototype
             throw new \Exception('Site not found');
         }
 
-        $unixUser = UnixUser::findOne($site->unix_user_id);
-
-        if (!$unixUser instanceof UnixUser) {
+        if (!$site->unixUser instanceof UnixUser) {
             throw new \Exception('Unix user not found');
         }
 
-        $sitePath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . '/' . UnixUser::SITES_PATH . '/' . $site->name;
+        $sitePath = \Yii::$app->params['userPath'] . '/' . $site->unixUser->home_path . '/' . UnixUser::SITES_PATH . '/' . $site->name;
 
         ShellHelper::mkdir($sitePath);
 
@@ -258,13 +248,11 @@ class SiteController extends RestControllerPrototype
             throw new \Exception('Site not found');
         }
 
-        $unixUser = UnixUser::findOne($site->unix_user_id);
-
-        if (!$unixUser instanceof UnixUser) {
+        if (!$site->unixUser instanceof UnixUser) {
             throw new \Exception('Unix user not found');
         }
 
-        $sitePath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . '/' . UnixUser::SITES_PATH . '/' . $site->name;
+        $sitePath = \Yii::$app->params['userPath'] . '/' . $site->unixUser->home_path . '/' . UnixUser::SITES_PATH . '/' . $site->name;
 
         ShellHelper::rm($sitePath);
 

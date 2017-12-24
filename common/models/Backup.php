@@ -77,13 +77,11 @@ class Backup extends \yii\db\ActiveRecord
         }
 
         // проверим есть ли пользователь
-        $unixUser = UnixUser::findOne($site->unix_user_id);
-
-        if (!$unixUser instanceof UnixUser) {
+        if (!$site->unixUser instanceof UnixUser) {
             throw new \Exception('Unix user not found');
         }
 
-        $backupPath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::BACKUPS_DB_PATH;
+        $backupPath = \Yii::$app->params['userPath'] . '/' . $site->unixUser->home_path . UnixUser::BACKUPS_DB_PATH;
 
         if (!file_exists($backupPath)) {
             throw new \Exception('DB backups path not found');
@@ -114,19 +112,17 @@ class Backup extends \yii\db\ActiveRecord
         }
 
         // проверим есть ли пользователь
-        $unixUser = UnixUser::findOne($site->unix_user_id);
-
-        if (!$unixUser instanceof UnixUser) {
+        if (!$site->unixUser instanceof UnixUser) {
             throw new \Exception('Unix user not found');
         }
 
-        $sitePath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::SITES_PATH . '/' . $site->name;
+        $sitePath = \Yii::$app->params['userPath'] . '/' . $site->unixUser->home_path . UnixUser::SITES_PATH . '/' . $site->name;
 
         if (!file_exists($sitePath)) {
             throw new \Exception('Site path not found');
         }
 
-        $backupPath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::BACKUPS_FILES_PATH;
+        $backupPath = \Yii::$app->params['userPath'] . '/' . $site->unixUser->home_path . UnixUser::BACKUPS_FILES_PATH;
 
         if (!file_exists($backupPath)) {
             throw new \Exception('File backups path not found');
@@ -200,8 +196,7 @@ class Backup extends \yii\db\ActiveRecord
         }
 
         // проверим unix пользователя
-        $unixUser = UnixUser::findOne($site->unix_user_id);
-        if (!$unixUser instanceof UnixUser) {
+        if (!$site->unixUser instanceof UnixUser) {
             throw new \Exception('Unix user not found');
         }
 
@@ -210,7 +205,7 @@ class Backup extends \yii\db\ActiveRecord
             throw new \Exception('Backup file not found');
         }
 
-        $sitePath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::SITES_PATH . '/' . $site->name;
+        $sitePath = \Yii::$app->params['userPath'] . '/' . $site->unixUser->home_path . UnixUser::SITES_PATH . '/' . $site->name;
 
         if (!file_exists($sitePath)) {
             throw new \Exception('Site path not found');

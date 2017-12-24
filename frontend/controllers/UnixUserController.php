@@ -25,7 +25,7 @@ class UnixUserController extends RestControllerPrototype
         if (!$unixUser instanceof UnixUser) {
             throw new \Exception('Unix user not found');
         }
-        // создать пользователя
+        // TODO создать пользователя
 
         // создать директории
         $dirs = UnixUser::getUserDirs(\Yii::$app->params['userPath'] . '/' . $unixUser->home_path);
