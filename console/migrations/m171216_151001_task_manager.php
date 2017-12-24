@@ -16,7 +16,7 @@ class m171216_151001_task_manager extends Migration
             'id' => $this->primaryKey(),
             'client_id' => $this->integer(),
             'raw_task' => $this->text(),
-            'entity' => $this->text(),
+            'class' => $this->text(),
             'action' => $this->text(),
             'status' => $this->integer(),
             'created_at' => $this->dateTime()
