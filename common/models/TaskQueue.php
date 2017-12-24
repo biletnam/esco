@@ -82,7 +82,11 @@ class TaskQueue extends \yii\db\ActiveRecord
         $task->params = $params;
         $task->created_at = date("Y-m-d H:i:s");
 
-        return $task->save();
+        if (!$task->save()) {
+            return false;
+        }
+
+        return $task->id;
     }
 
     /**
