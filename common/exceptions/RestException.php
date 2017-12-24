@@ -28,7 +28,7 @@ class RestException extends ErrorHandler {
         }
 
         $response->data = [
-            'status' => 'fail',
+            'status' => 'error',
             'data' => [
                 'message' => $exception->getMessage()
             ]
