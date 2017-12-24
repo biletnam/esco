@@ -1,16 +1,9 @@
 <?php
 
 namespace frontend\controllers;
-use common\exceptions\RestException;
-use common\helpers\BackupHelper;
-use common\helpers\FileHelper;
-use common\helpers\ShellHelper;
+
 use common\models\Backup;
-use common\models\Site;
-use common\models\TaskQueue;
-use common\models\UnixUser;
 use frontend\prototypes\RestControllerPrototype;
-use yii\httpclient\Client;
 
 /**
  * Class BackupController
@@ -38,7 +31,7 @@ class BackupController extends RestControllerPrototype
             throw new \Exception('Invalid backup type');
         }
 
-        if (!file_exists($result)) {
+        if (!$result) {
             throw new \Exception('Can\'t create task');
         }
 
@@ -52,9 +45,34 @@ class BackupController extends RestControllerPrototype
      * Восстановить бекап
      *
      * @param $backupId
+     * @return array
+     * @throws \Exception
      */
     public function actionRestore($backupId)
     {
+        // проверим наличие бекапа
+        $backup = Backup::findOne($backupId);
 
+        if (!$backup instanceof Backup) {
+            throw new \Exception('Backup not found');
+        }
+
+        // пытаемся восстановить бекап
+        if ($backup->type === Backup::TYPE_DB) {
+            $result = Backup::restoreDbBackup($backup->id);
+        } elseif ($backup->type === Backup::TYPE_FILES) {
+            $result = Backup::restoreFilesBackup($backup->id);
+        } else {
+            throw new \Exception('Invalid backup type');
+        }
+
+        if (!$result) {
+            throw new \Exception('Can\'t create task');
+        }
+
+        return [
+            'message' => 'Task created',
+            'taskId' => $result
+        ];
     }
 }

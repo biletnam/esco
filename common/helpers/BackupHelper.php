@@ -59,7 +59,7 @@ class BackupHelper
      * @param $path
      * @param $fileName
      */
-    public static function restoreFileBackup($path, $fileName)
+    public static function restoreFilesBackup($path, $fileName)
     {
 
     }

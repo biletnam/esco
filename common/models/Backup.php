@@ -64,6 +64,8 @@ class Backup extends \yii\db\ActiveRecord
      * Создает бекап БД
      *
      * @param $siteId
+     * @return bool
+     * @throws \Exception
      */
     public static function createDbBackup($siteId)
     {
@@ -99,6 +101,8 @@ class Backup extends \yii\db\ActiveRecord
      * Создает бекап файлов
      *
      * @param $siteId
+     * @return bool
+     * @throws \Exception
      */
     public static function createFilesBackup($siteId)
     {
@@ -140,19 +144,81 @@ class Backup extends \yii\db\ActiveRecord
      * Разворачивает бекап БД
      *
      * @param $backupId
+     * @return bool
+     * @throws \Exception
      */
     public static function restoreDbBackup($backupId)
     {
+        // проверим наличие бекапа
+        $backup = Backup::findOne($backupId);
 
+        if (!$backup instanceof Backup) {
+            throw new \Exception('Backup not found');
+        }
+
+        // проверим есть ли сайт
+        $site = Site::findOne($backup->site_id);
+
+        if (!$site instanceof Site) {
+            throw new \Exception('Site not found');
+        }
+
+        // проверим есть ли файл бекапа
+        if (!file_exists($backup->file)) {
+            throw new \Exception('Backup file not found');
+        }
+
+        // Поставить задачу в таскменеджер
+        return TaskQueue::createTask(BackupHelper::getNamespace() . 'BackupHelper', 'restoreDbBackup', [
+            'dbName' => $site->db_name,
+            'fileName' => $backup->file
+        ]);
     }
 
     /**
      * Разворачивает бекап файлов
      *
      * @param $backupId
+     * @return bool
+     * @throws \Exception
      */
     public static function restoreFilesBackup($backupId)
     {
+        // проверим наличие бекапа
+        $backup = Backup::findOne($backupId);
 
+        if (!$backup instanceof Backup) {
+            throw new \Exception('Backup not found');
+        }
+
+        // проверим есть ли сайт
+        $site = Site::findOne($backup->site_id);
+
+        if (!$site instanceof Site) {
+            throw new \Exception('Site not found');
+        }
+
+        // проверим unix пользователя
+        $unixUser = UnixUser::findOne($site->unix_user_id);
+        if (!$unixUser instanceof UnixUser) {
+            throw new \Exception('Unix user not found');
+        }
+
+        // проверим есть ли файл бекапа
+        if (!file_exists($backup->file)) {
+            throw new \Exception('Backup file not found');
+        }
+
+        $sitePath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::SITES_PATH . '/' . $site->name;
+
+        if (!file_exists($sitePath)) {
+            throw new \Exception('Site path not found');
+        }
+
+        // Поставить задачу в таскменеджер
+        return TaskQueue::createTask(BackupHelper::getNamespace() . 'BackupHelper', 'restoreFilesBackup', [
+            'path' => $sitePath,
+            'fileName' => $backup->file
+        ]);
     }
 }
