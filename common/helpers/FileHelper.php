@@ -11,6 +11,12 @@ namespace common\helpers;
 
 class FileHelper
 {
+
+    public static function getNamespace()
+    {
+        return __NAMESPACE__;
+    }
+
     /**
      * Получает файл по URL. TODO Возможно лучше использовать wget и писать сразу в файл
      *

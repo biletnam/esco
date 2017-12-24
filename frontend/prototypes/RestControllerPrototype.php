@@ -37,14 +37,15 @@ class RestControllerPrototype extends ActiveController
         // TODO authCode должен передаваться в зафишрованном виде, а тут расфировываться.
         // TODO возможно шифровать надо всю посылку
         // проверим authCode
-        $authCode = \Yii::$app->request->get('authCode');
-        if ($authCode === null) {
-            throw new \Exception('authCode not found');
-        }
-
-        if (\Yii::$app->params['frontends']['authCode'] !== $authCode) {
-            throw new \Exception('Invalid authCode');
-        }
+        // TODO раскоментить потом
+//        $authCode = \Yii::$app->request->get('authCode');
+//        if ($authCode === null) {
+//            throw new \Exception('authCode not found');
+//        }
+//
+//        if (\Yii::$app->params['frontends']['authCode'] !== $authCode) {
+//            throw new \Exception('Invalid authCode');
+//        }
     }
 
     /**
