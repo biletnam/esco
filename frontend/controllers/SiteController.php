@@ -57,6 +57,8 @@ class SiteController extends RestControllerPrototype
             throw new \Exception('Can\'t create task');
         }
 
+        $this->setStatus('task_created');
+
         return [
             'message' => 'Task created',
             'taskId' => $result
@@ -109,6 +111,8 @@ class SiteController extends RestControllerPrototype
             throw new \Exception('Can\'t create task');
         }
 
+        $this->setStatus('task_created');
+
         return [
             'message' => 'Task created',
             'taskId' => $result
@@ -155,6 +159,8 @@ class SiteController extends RestControllerPrototype
             throw new \Exception('Can\'t create task');
         }
 
+        $this->setStatus('task_created');
+
         return [
             'message' => 'Task created',
             'taskId' => $result
@@ -194,6 +200,8 @@ class SiteController extends RestControllerPrototype
         if (!$result) {
             throw new \Exception('Can\'t create task');
         }
+
+        $this->setStatus('task_created');
 
         return [
             'message' => 'Task created',
