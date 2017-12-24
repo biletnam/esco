@@ -2,10 +2,12 @@
 
 namespace frontend\controllers;
 use common\exceptions\RestException;
+use common\helpers\BackupHelper;
 use common\helpers\FileHelper;
 use common\helpers\ShellHelper;
 use common\models\Backup;
 use common\models\Site;
+use common\models\TaskQueue;
 use common\models\UnixUser;
 use frontend\prototypes\RestControllerPrototype;
 use yii\httpclient\Client;
@@ -29,21 +31,20 @@ class BackupController extends RestControllerPrototype
     public function actionCreate($siteId, $typeId)
     {
         if ($typeId === Backup::TYPE_DB) {
-            // TODO должен ставить задачу в taskManager
-            $file = Backup::createDbBackup($siteId, $typeId);
+            $result = Backup::createDbBackup($siteId);
         } elseif ($typeId === Backup::TYPE_FILES) {
-            // TODO должен ставить задачу в taskManager
-            $file = Backup::createFilesBackup($siteId, $typeId);
+            $result = Backup::createFilesBackup($siteId);
         } else {
             throw new \Exception('Invalid backup type');
         }
 
-        if (!file_exists($file)) {
-            throw new \Exception('Can\'t create backup');
+        if (!file_exists($result)) {
+            throw new \Exception('Can\'t create task');
         }
 
         return [
-            'message' => 'Backup created'
+            'message' => 'Task created',
+            'taskId' => $result
         ];
     }
 

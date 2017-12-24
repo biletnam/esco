@@ -96,7 +96,7 @@ class SiteController extends RestControllerPrototype
             throw new \Exception('Unix user not found');
         }
 
-        // проверим есть ли tmp директория
+        // проверим есть ли директория сайта
         $sitePath = \Yii::$app->params['userPath'] . '/' . $unixUser->home_path . UnixUser::SITES_PATH . '/' . $site->name;
 
         if (!file_exists($sitePath)) {

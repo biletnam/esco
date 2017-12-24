@@ -21,21 +21,23 @@ class BackupHelper
     }
 
     /**
-     * Создает файл бекапа из указанной директории
+     * Создает файл бекапа из указанной директории в указанный файл
      *
      * @param $path
+     * @param $file
      */
-    public static function createFilesBackup($path)
+    public static function createFilesBackup($path, $file)
     {
 
     }
 
     /**
-     * Создает бекап БД
+     * Создает бекап БД в указанный файл
      *
      * @param $dbName
+     * @param $file
      */
-    public static function createDbBackup($dbName)
+    public static function createDbBackup($dbName, $file)
     {
 
     }
