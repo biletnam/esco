@@ -11,6 +11,7 @@ use Yii;
  * @property string $name
  * @property string $db_name
  * @property integer $unix_user_id
+ * @property UnixUser $unixUser
  */
 class Site extends \yii\db\ActiveRecord
 {
@@ -68,5 +69,13 @@ class Site extends \yii\db\ActiveRecord
             'unix_user_id' => 'Client ID',
             'db_name' => 'DB name'
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUnixUser()
+    {
+        return $this->hasOne(UnixUser::className(), ['id' => 'unix_user_id']);
     }
 }

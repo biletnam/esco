@@ -13,6 +13,7 @@ use Yii;
  * @property integer $type
  * @property string $date
  * @property string $file
+ * @property Site $site
  */
 class Backup extends \yii\db\ActiveRecord
 {
@@ -220,5 +221,13 @@ class Backup extends \yii\db\ActiveRecord
             'path' => $sitePath,
             'fileName' => $backup->file
         ]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSite()
+    {
+        return $this->hasOne(Site::className(), ['id' => 'site_id']);
     }
 }
